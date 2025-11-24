@@ -18,6 +18,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
+    if (!supabase) {
+      console.warn(
+        "Supabase is not configured. Please set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY environment variables.",
+      )
+      setIsLoading(false)
+      return
+    }
+
     // Check current user on mount
     checkUser()
 
@@ -46,11 +54,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
-  return (
-    <AuthContext.Provider value={{ user, isLoading, isSignedIn: user !== null }}>
-      {children}
-    </AuthContext.Provider>
-  )
+  return <AuthContext.Provider value={{ user, isLoading, isSignedIn: user !== null }}>{children}</AuthContext.Provider>
 }
 
 export function useAuth() {
