@@ -27,7 +27,7 @@ export default function AddItemModal({ onClose, onAdd }: AddItemModalProps) {
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
-          <h2 className="text-xl font-bold text-foreground">Adicionar Item</h2>
+          <h2 className="text-xl font-bold text-gray-900">Adicionar Item</h2>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors" aria-label="Fechar">
             <X className="w-6 h-6" />
           </button>
@@ -44,7 +44,7 @@ export default function AddItemModal({ onClose, onAdd }: AddItemModalProps) {
               value={itemName}
               onChange={(e) => setItemName(e.target.value)}
               placeholder="Ex: Leite, Pão..."
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent placeholder-gray-600"
               autoFocus
             />
           </div>
@@ -59,7 +59,7 @@ export default function AddItemModal({ onClose, onAdd }: AddItemModalProps) {
               min="1"
               value={quantity}
               onChange={(e) => setQuantity(Math.max(1, Number.parseInt(e.target.value) || 1))}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent placeholder-gray-600"
             />
           </div>
 
@@ -74,7 +74,7 @@ export default function AddItemModal({ onClose, onAdd }: AddItemModalProps) {
             <button
               type="submit"
               disabled={!itemName.trim()}
-              className="flex-1 px-4 py-2 bg-primary text-white rounded-lg font-medium hover:bg-blue-700 disabled:bg-gray-300 transition-colors"
+              className="flex-1 px-4 py-2 bg-yellow-400 text-white rounded-lg font-medium hover:bg-yellow-500 disabled:bg-gray-300 transition-colors"
             >
               Adicionar
             </button>

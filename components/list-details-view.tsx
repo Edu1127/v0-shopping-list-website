@@ -1,25 +1,12 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { ArrowLeft, Plus, Trash2, Check, LogOut } from "lucide-react"
+import { getShoppingListItems, subscribeToShoppingListItems, type ShoppingList, type ShoppingListItem } from "@/lib/shopping-lists"
 import AddItemModal from "./add-item-modal"
 
-interface ShoppingItem {
-  id: string
-  name: string
-  quantity: number
-  completed: boolean
-}
-
-interface ShoppingList {
-  id: string
-  name: string
-  items: ShoppingItem[]
-  createdAt: Date
-}
-
 interface ListDetailsViewProps {
-  list: ShoppingList
+  list: ShoppingList & { items?: ShoppingListItem[] }
   onBack: () => void
   onAddItem: (listId: string, itemName: string, quantity: number) => void
   onToggleItem: (listId: string, itemId: string) => void
@@ -36,7 +23,50 @@ export default function ListDetailsView({
   onLogout,
 }: ListDetailsViewProps) {
   const [showAddItemModal, setShowAddItemModal] = useState(false)
-  const completedCount = list.items.filter((item) => item.completed).length
+  const [items, setItems] = useState<ShoppingListItem[]>(list.items || [])
+  const [isLoadingItems, setIsLoadingItems] = useState(!list.items)
+
+  useEffect(() => {
+    if (!list.items) {
+      loadItems()
+    }
+
+    // Subscribe to realtime changes
+    const unsubscribe = subscribeToShoppingListItems(list.id, (updatedItems) => {
+      setItems(updatedItems)
+    })
+
+    return () => {
+      unsubscribe()
+    }
+  }, [list.id, list.items])
+
+  async function loadItems() {
+    try {
+      const { items: fetchedItems } = await getShoppingListItems(list.id)
+      setItems(fetchedItems)
+    } catch (error) {
+      console.error("Error loading items:", error)
+    } finally {
+      setIsLoadingItems(false)
+    }
+  }
+
+  const completedCount = items.filter((item) => item.completed).length
+
+  const handleDeleteItem = async (itemId: string) => {
+    // Remove item from UI immediately (optimistic update)
+    const previousItems = items
+    setItems(items.filter((item) => item.id !== itemId))
+
+    try {
+      await onDeleteItem(list.id, itemId)
+    } catch (error) {
+      // Restore items if deletion fails
+      console.error("Error deleting item:", error)
+      setItems(previousItems)
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -45,12 +75,12 @@ export default function ListDetailsView({
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
           <button
             onClick={onBack}
-            className="flex items-center gap-2 text-primary font-semibold hover:text-blue-700 transition-colors"
+            className="flex items-center gap-2 text-yellow-500 font-semibold hover:text-yellow-600 transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
             Voltar
           </button>
-          <h1 className="text-2xl font-bold text-foreground flex-1 text-center">{list.name}</h1>
+          <h1 className="text-2xl font-bold text-gray-900 flex-1 text-center">{list.name}</h1>
           <button
             onClick={onLogout}
             className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
@@ -65,24 +95,24 @@ export default function ListDetailsView({
       <main className="max-w-4xl mx-auto px-4 py-8">
         {/* Progress Section */}
         <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-          <h2 className="text-lg font-semibold text-foreground mb-4">Progresso</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Progresso</h2>
           <div className="flex items-end gap-4">
             <div className="flex-1">
               <div className="w-full bg-gray-200 rounded-full h-3">
                 <div
-                  className="bg-primary h-3 rounded-full transition-all duration-300"
+                  className="bg-yellow-400 h-3 rounded-full transition-all duration-300"
                   style={{
-                    width: list.items.length > 0 ? `${(completedCount / list.items.length) * 100}%` : "0%",
+                    width: items.length > 0 ? `${(completedCount / items.length) * 100}%` : "0%",
                   }}
                 />
               </div>
             </div>
-            <span className="text-xl font-bold text-primary">
-              {list.items.length > 0 ? Math.round((completedCount / list.items.length) * 100) : 0}%
+            <span className="text-xl font-bold text-yellow-500">
+              {items.length > 0 ? Math.round((completedCount / items.length) * 100) : 0}%
             </span>
           </div>
           <p className="text-gray-600 text-sm mt-3">
-            {completedCount} de {list.items.length} itens marcados
+            {completedCount} de {items.length} itens marcados
           </p>
         </div>
 
@@ -90,7 +120,7 @@ export default function ListDetailsView({
         <div className="mb-6">
           <button
             onClick={() => setShowAddItemModal(true)}
-            className="flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+            className="flex items-center gap-2 bg-yellow-400 text-white px-6 py-3 rounded-lg font-semibold hover:bg-yellow-500 transition-colors"
           >
             <Plus className="w-5 h-5" />
             Adicionar Item
@@ -99,14 +129,16 @@ export default function ListDetailsView({
 
         {/* Items List */}
         <div className="space-y-3">
-          {list.items.length > 0 ? (
+          {isLoadingItems ? (
+            <p className="text-gray-600">Carregando itens...</p>
+          ) : items.length > 0 ? (
             <>
               {/* Active Items */}
-              {list.items.filter((item) => !item.completed).length > 0 && (
+              {items.filter((item) => !item.completed).length > 0 && (
                 <div>
                   <h3 className="text-sm font-semibold text-gray-600 mb-3 uppercase">Pendente</h3>
                   <div className="space-y-2">
-                    {list.items
+                    {items
                       .filter((item) => !item.completed)
                       .map((item) => (
                         <div
@@ -115,16 +147,16 @@ export default function ListDetailsView({
                         >
                           <button
                             onClick={() => onToggleItem(list.id, item.id)}
-                            className="flex-shrink-0 w-6 h-6 border-2 border-gray-300 rounded-full hover:border-primary transition-colors flex items-center justify-center"
+                            className="flex-shrink-0 w-6 h-6 border-2 border-gray-300 rounded-full hover:border-yellow-400 transition-colors flex items-center justify-center"
                           >
                             <div className="w-4 h-4" />
                           </button>
                           <div className="flex-1">
-                            <p className="text-foreground font-medium">{item.name}</p>
+                            <p className="text-gray-900 font-medium">{item.name}</p>
                             <p className="text-gray-500 text-sm">Quantidade: {item.quantity}</p>
                           </div>
                           <button
-                            onClick={() => onDeleteItem(list.id, item.id)}
+                            onClick={() => handleDeleteItem(item.id)}
                             className="text-gray-400 hover:text-red-500 transition-colors"
                             aria-label="Deletar item"
                           >
@@ -141,7 +173,7 @@ export default function ListDetailsView({
                 <div className="mt-8">
                   <h3 className="text-sm font-semibold text-gray-600 mb-3 uppercase">Concluído</h3>
                   <div className="space-y-2">
-                    {list.items
+                    {items
                       .filter((item) => item.completed)
                       .map((item) => (
                         <div
@@ -159,7 +191,7 @@ export default function ListDetailsView({
                             <p className="text-gray-400 text-sm">Quantidade: {item.quantity}</p>
                           </div>
                           <button
-                            onClick={() => onDeleteItem(list.id, item.id)}
+                            onClick={() => handleDeleteItem(item.id)}
                             className="text-gray-400 hover:text-red-500 transition-colors"
                             aria-label="Deletar item"
                           >
@@ -176,7 +208,7 @@ export default function ListDetailsView({
               <p className="text-gray-600 text-lg mb-4">Nenhum item adicionado</p>
               <button
                 onClick={() => setShowAddItemModal(true)}
-                className="bg-primary text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+                className="bg-yellow-400 text-white px-6 py-2 rounded-lg font-semibold hover:bg-yellow-500 transition-colors"
               >
                 Adicionar Primeiro Item
               </button>

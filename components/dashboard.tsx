@@ -1,24 +1,12 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { LogOut, Plus } from "lucide-react"
+import { useAuth } from "@/components/auth-provider"
+import { getShoppingLists, createShoppingList, deleteShoppingList, subscribeToShoppingLists, type ShoppingList } from "@/lib/shopping-lists"
 import ShoppingListCard from "./shopping-list-card"
 import CreateListModal from "./create-list-modal"
 import ListDetailsView from "./list-details-view"
-
-interface ShoppingList {
-  id: string
-  name: string
-  items: ShoppingItem[]
-  createdAt: Date
-}
-
-interface ShoppingItem {
-  id: string
-  name: string
-  quantity: number
-  completed: boolean
-}
 
 interface DashboardProps {
   userName: string
@@ -26,91 +14,99 @@ interface DashboardProps {
 }
 
 export default function Dashboard({ userName, onLogout }: DashboardProps) {
-  const [lists, setLists] = useState<ShoppingList[]>([
-    {
-      id: "1",
-      name: "Supermercado",
-      items: [
-        { id: "1", name: "Leite", quantity: 2, completed: false },
-        { id: "2", name: "Pão", quantity: 1, completed: true },
-      ],
-      createdAt: new Date(),
-    },
-  ])
+  const { user } = useAuth()
+  const [lists, setLists] = useState<ShoppingList[]>([])
+  const [isLoading, setIsLoading] = useState(true)
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [selectedListId, setSelectedListId] = useState<string | null>(null)
 
-  const handleCreateList = (name: string) => {
-    const newList: ShoppingList = {
-      id: Date.now().toString(),
-      name,
-      items: [],
-      createdAt: new Date(),
+  useEffect(() => {
+    if (user) {
+      loadLists()
+      // Subscribe to realtime changes
+      const unsubscribe = subscribeToShoppingLists(user.id, (updatedLists) => {
+        setLists(updatedLists)
+      })
+
+      return () => {
+        unsubscribe()
+      }
     }
-    setLists([...lists, newList])
-    setShowCreateModal(false)
-  }
+  }, [user])
 
-  const handleDeleteList = (id: string) => {
-    setLists(lists.filter((list) => list.id !== id))
-    if (selectedListId === id) {
-      setSelectedListId(null)
+  async function loadLists() {
+    try {
+      if (!user) return
+      setIsLoading(true)
+      const { lists: fetchedLists } = await getShoppingLists(user.id)
+      setLists(fetchedLists)
+    } catch (error) {
+      console.error("Error loading lists:", error)
+    } finally {
+      setIsLoading(false)
     }
   }
 
-  const handleAddItem = (listId: string, itemName: string, quantity: number) => {
-    setLists(
-      lists.map((list) => {
-        if (list.id === listId) {
-          return {
-            ...list,
-            items: [
-              ...list.items,
-              {
-                id: Date.now().toString(),
-                name: itemName,
-                quantity,
-                completed: false,
-              },
-            ],
-          }
-        }
-        return list
-      }),
-    )
+  const handleCreateList = async (name: string) => {
+    try {
+      if (!user) return
+      const { list } = await createShoppingList(user.id, name)
+      if (list) {
+        setLists([list, ...lists])
+        setShowCreateModal(false)
+      }
+    } catch (error) {
+      console.error("Error creating list:", error)
+    }
   }
 
-  const handleToggleItem = (listId: string, itemId: string) => {
-    setLists(
-      lists.map((list) => {
-        if (list.id === listId) {
-          return {
-            ...list,
-            items: list.items.map((item) => {
-              if (item.id === itemId) {
-                return { ...item, completed: !item.completed }
-              }
-              return item
-            }),
-          }
-        }
-        return list
-      }),
-    )
+  const handleDeleteList = async (id: string) => {
+    try {
+      await deleteShoppingList(id)
+      setLists(lists.filter((list) => list.id !== id))
+      if (selectedListId === id) {
+        setSelectedListId(null)
+      }
+    } catch (error) {
+      console.error("Error deleting list:", error)
+    }
   }
 
-  const handleDeleteItem = (listId: string, itemId: string) => {
-    setLists(
-      lists.map((list) => {
-        if (list.id === listId) {
-          return {
-            ...list,
-            items: list.items.filter((item) => item.id !== itemId),
-          }
-        }
-        return list
-      }),
-    )
+  const handleAddItem = async (listId: string, itemName: string, quantity: number) => {
+    try {
+      const { addShoppingListItem } = await import("@/lib/shopping-lists")
+      await addShoppingListItem(listId, itemName, quantity)
+      // Realtime subscription will handle the update
+    } catch (error) {
+      console.error("Error adding item:", error)
+    }
+  }
+
+  const handleToggleItem = async (listId: string, itemId: string) => {
+    try {
+      const { toggleShoppingListItem, getShoppingListItems } = await import("@/lib/shopping-lists")
+      
+      // Get current items to find the item's current completed state
+      const { items } = await getShoppingListItems(listId)
+      const item = items.find((i) => i.id === itemId)
+      
+      if (item) {
+        await toggleShoppingListItem(itemId, !item.completed)
+        // Realtime subscription will handle the update
+      }
+    } catch (error) {
+      console.error("Error toggling item:", error)
+    }
+  }
+
+  const handleDeleteItem = async (listId: string, itemId: string) => {
+    try {
+      const { deleteShoppingListItem } = await import("@/lib/shopping-lists")
+      await deleteShoppingListItem(itemId)
+      // Realtime subscription will handle the update
+    } catch (error) {
+      console.error("Error deleting item:", error)
+    }
   }
 
   const selectedList = lists.find((list) => list.id === selectedListId)
@@ -134,8 +130,8 @@ export default function Dashboard({ userName, onLogout }: DashboardProps) {
       <header className="bg-white shadow-sm sticky top-0 z-10">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-primary">ShopList</h1>
-            <p className="text-gray-600 text-sm">Bem-vindo, {userName}</p>
+            <h1 className="text-2xl font-bold text-yellow-500">ShopList</h1>
+            <p className="text-gray-700 text-sm">Bem-vindo, {userName}</p>
           </div>
           <button
             onClick={onLogout}
@@ -152,12 +148,12 @@ export default function Dashboard({ userName, onLogout }: DashboardProps) {
         {/* Create List Button */}
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h2 className="text-3xl font-bold text-foreground mb-2">Minhas Listas</h2>
-            <p className="text-gray-600">Gerencie suas listas de compras</p>
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">Minhas Listas</h2>
+            <p className="text-gray-700">Gerencie suas listas de compras</p>
           </div>
           <button
             onClick={() => setShowCreateModal(true)}
-            className="flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+            className="flex items-center gap-2 bg-yellow-400 text-white px-6 py-3 rounded-lg font-semibold hover:bg-yellow-500 transition-colors"
           >
             <Plus className="w-5 h-5" />
             Nova Lista
@@ -165,7 +161,11 @@ export default function Dashboard({ userName, onLogout }: DashboardProps) {
         </div>
 
         {/* Lists Grid */}
-        {lists.length > 0 ? (
+        {isLoading ? (
+          <div className="text-center py-12">
+            <p className="text-gray-600 text-lg">Carregando listas...</p>
+          </div>
+        ) : lists.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {lists.map((list) => (
               <ShoppingListCard
@@ -181,7 +181,7 @@ export default function Dashboard({ userName, onLogout }: DashboardProps) {
             <p className="text-gray-600 text-lg mb-4">Nenhuma lista criada ainda</p>
             <button
               onClick={() => setShowCreateModal(true)}
-              className="bg-primary text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+              className="bg-yellow-400 text-white px-6 py-2 rounded-lg font-semibold hover:bg-yellow-500 transition-colors"
             >
               Criar Primeira Lista
             </button>
