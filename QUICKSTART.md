@@ -2,9 +2,9 @@
 
 ### 1️⃣ Iniciar o Servidor
 
-```bash
+\`\`\`bash
 npm run dev
-```
+\`\`\`
 
 Abrirá em `http://localhost:3000`
 
@@ -34,7 +34,7 @@ Você será redirecionado automaticamente para o Dashboard. Agora pode:
 
 ## 📁 Estrutura de Arquivos Importantes
 
-```
+\`\`\`
 lib/
 ├── supabase.ts          # Cliente Supabase
 ├── auth.ts              # Funções de autenticação
@@ -50,7 +50,7 @@ components/
 app/
 ├── page.tsx             # Página principal
 └── layout.tsx           # Layout com providers
-```
+\`\`\`
 
 ## 🔑 Principais Funcionalidades
 
@@ -76,25 +76,25 @@ As cores amarelas estão em:
 - Classes: `bg-yellow-400`, `hover:bg-yellow-500`
 
 Para mudar para outra cor, faça busca e substitua:
-```
+\`\`\`
 bg-yellow-400 → bg-blue-400
 bg-yellow-500 → bg-blue-500
 focus:ring-yellow-400 → focus:ring-blue-400
-```
+\`\`\`
 
 ### Mudar Nome da App
 
 Em `components/dashboard.tsx` e `components/login-page.tsx`:
-```
+\`\`\`
 ShopList → Seu Nome
-```
+\`\`\`
 
 ### Mudar Descrição
 
 Em `components/login-page.tsx`:
-```
+\`\`\`
 "Organize suas compras com facilidade" → Sua descrição
-```
+\`\`\`
 
 ## 🐛 Se Algo Não Funcionar
 
@@ -118,7 +118,7 @@ Em `components/login-page.tsx`:
 
 ## 📞 Comandos Úteis
 
-```bash
+\`\`\`bash
 # Desenvolvimento
 npm run dev
 
@@ -130,7 +130,7 @@ npm start
 
 # Lint de código
 npm run lint
-```
+\`\`\`
 
 ## 📚 Documentação Completa
 

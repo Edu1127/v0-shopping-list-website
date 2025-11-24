@@ -1,4 +1,4 @@
-```
+\`\`\`
 ╔═══════════════════════════════════════════════════════════════════════════╗
 ║                                                                           ║
 ║           IMPLEMENTAÇÃO CONCLUÍDA - PRÓXIMAS AÇÕES E REFERÊNCIA          ║
@@ -49,9 +49,9 @@ PRÓXIMA SESSÃO - COMEÇAR AQUI:
    └─ components/auth-provider.tsx
 
 2. Teste localmente:
-   ```bash
+   \`\`\`bash
    npm run dev
-   ```
+   \`\`\`
    Acesse http://localhost:3000
 
 3. Siga TESTING_GUIDE.md para testar todas as funcionalidades
@@ -165,22 +165,22 @@ TESTAR NOVA FUNCIONALIDADE
 ═══════════════════════════════════════════════════════════════════════════
 
 VERCEL (Recomendado)
-```bash
+\`\`\`bash
 git push origin main
 # Deploy automático em vercel.com
-```
+\`\`\`
 
 NETLIFY
-```bash
+\`\`\`bash
 git push origin main
 # Deploy automático em netlify.com
-```
+\`\`\`
 
 DOCKER
-```bash
+\`\`\`bash
 docker build -t myapp .
 docker run -p 3000:3000 myapp
-```
+\`\`\`
 
 Veja DEPLOY_GUIDE.md para instruções detalhadas
 
@@ -240,4 +240,4 @@ Agora que autenticação está pronta, considere:
            Para qualquer dúvida, consulte a documentação criada
 
 ═══════════════════════════════════════════════════════════════════════════
-```
+\`\`\`

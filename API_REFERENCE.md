@@ -5,9 +5,9 @@
 #### `signUp(email, password, fullName)`
 Criar nova conta e perfil.
 
-```typescript
+\`\`\`typescript
 const { user, error } = await signUp("user@example.com", "senha123", "João Silva");
-```
+\`\`\`
 
 **Retorna**: `{ user: User | null, error: Error | null }`
 
@@ -16,9 +16,9 @@ const { user, error } = await signUp("user@example.com", "senha123", "João Silv
 #### `signIn(email, password)`
 Fazer login.
 
-```typescript
+\`\`\`typescript
 const { user, session, error } = await signIn("user@example.com", "senha123");
-```
+\`\`\`
 
 **Retorna**: `{ user: User | null, session: Session | null, error: Error | null }`
 
@@ -27,9 +27,9 @@ const { user, session, error } = await signIn("user@example.com", "senha123");
 #### `signOut()`
 Fazer logout e limpar sessão.
 
-```typescript
+\`\`\`typescript
 const { error } = await signOut();
-```
+\`\`\`
 
 **Retorna**: `{ error: Error | null }`
 
@@ -38,9 +38,9 @@ const { error } = await signOut();
 #### `getCurrentUser()`
 Obter usuário autenticado atual.
 
-```typescript
+\`\`\`typescript
 const { user, error } = await getCurrentUser();
-```
+\`\`\`
 
 **Retorna**: `{ user: User | null, error: Error | null }`
 
@@ -49,10 +49,10 @@ const { user, error } = await getCurrentUser();
 #### `getProfile(userId)`
 Obter perfil do usuário.
 
-```typescript
+\`\`\`typescript
 const { profile, error } = await getProfile(user.id);
 // profile.full_name, profile.email, profile.avatar_url
-```
+\`\`\`
 
 **Retorna**: `{ profile: Profile | null, error: Error | null }`
 
@@ -61,12 +61,12 @@ const { profile, error } = await getProfile(user.id);
 #### `updateProfile(userId, updates)`
 Atualizar perfil do usuário.
 
-```typescript
+\`\`\`typescript
 const { profile, error } = await updateProfile(user.id, {
   full_name: "Novo Nome",
   avatar_url: "https://..."
 });
-```
+\`\`\`
 
 **Retorna**: `{ profile: Profile | null, error: Error | null }`
 
@@ -77,9 +77,9 @@ const { profile, error } = await updateProfile(user.id, {
 #### `getShoppingLists(userId)`
 Listar todas as listas do usuário.
 
-```typescript
+\`\`\`typescript
 const { lists, error } = await getShoppingLists(user.id);
-```
+\`\`\`
 
 **Retorna**: `{ lists: ShoppingList[], error: Error | null }`
 
@@ -88,9 +88,9 @@ const { lists, error } = await getShoppingLists(user.id);
 #### `createShoppingList(userId, name, description?)`
 Criar nova lista.
 
-```typescript
+\`\`\`typescript
 const { list, error } = await createShoppingList(user.id, "Supermercado", "Compras");
-```
+\`\`\`
 
 **Retorna**: `{ list: ShoppingList | null, error: Error | null }`
 
@@ -99,12 +99,12 @@ const { list, error } = await createShoppingList(user.id, "Supermercado", "Compr
 #### `updateShoppingList(listId, updates)`
 Atualizar lista.
 
-```typescript
+\`\`\`typescript
 const { list, error } = await updateShoppingList(listId, {
   name: "Novo Nome",
   description: "Nova Descrição"
 });
-```
+\`\`\`
 
 **Retorna**: `{ list: ShoppingList | null, error: Error | null }`
 
@@ -113,9 +113,9 @@ const { list, error } = await updateShoppingList(listId, {
 #### `deleteShoppingList(listId)`
 Deletar lista (também deleta todos os itens).
 
-```typescript
+\`\`\`typescript
 const { error } = await deleteShoppingList(listId);
-```
+\`\`\`
 
 **Retorna**: `{ error: Error | null }`
 
@@ -126,9 +126,9 @@ const { error } = await deleteShoppingList(listId);
 #### `getShoppingListItems(listId)`
 Listar todos os itens da lista.
 
-```typescript
+\`\`\`typescript
 const { items, error } = await getShoppingListItems(listId);
-```
+\`\`\`
 
 **Retorna**: `{ items: ShoppingListItem[], error: Error | null }`
 
@@ -137,9 +137,9 @@ const { items, error } = await getShoppingListItems(listId);
 #### `addShoppingListItem(listId, name, quantity?)`
 Adicionar item à lista.
 
-```typescript
+\`\`\`typescript
 const { item, error } = await addShoppingListItem(listId, "Leite", 2);
-```
+\`\`\`
 
 **Retorna**: `{ item: ShoppingListItem | null, error: Error | null }`
 
@@ -148,13 +148,13 @@ const { item, error } = await addShoppingListItem(listId, "Leite", 2);
 #### `updateShoppingListItem(itemId, updates)`
 Atualizar item.
 
-```typescript
+\`\`\`typescript
 const { item, error } = await updateShoppingListItem(itemId, {
   name: "Novo Nome",
   quantity: 5,
   completed: true
 });
-```
+\`\`\`
 
 **Retorna**: `{ item: ShoppingListItem | null, error: Error | null }`
 
@@ -163,9 +163,9 @@ const { item, error } = await updateShoppingListItem(itemId, {
 #### `deleteShoppingListItem(itemId)`
 Deletar item.
 
-```typescript
+\`\`\`typescript
 const { error } = await deleteShoppingListItem(itemId);
-```
+\`\`\`
 
 **Retorna**: `{ error: Error | null }`
 
@@ -174,9 +174,9 @@ const { error } = await deleteShoppingListItem(itemId);
 #### `toggleShoppingListItem(itemId, completed)`
 Marcar como concluído/pendente.
 
-```typescript
+\`\`\`typescript
 const { item, error } = await toggleShoppingListItem(itemId, true);
-```
+\`\`\`
 
 **Retorna**: `{ item: ShoppingListItem | null, error: Error | null }`
 
@@ -187,7 +187,7 @@ const { item, error } = await toggleShoppingListItem(itemId, true);
 #### `useAuth()`
 Hook para acessar estado de autenticação em componentes.
 
-```typescript
+\`\`\`typescript
 const { user, isLoading, isSignedIn } = useAuth();
 
 if (isLoading) return <div>Carregando...</div>;
@@ -197,7 +197,7 @@ if (isSignedIn) {
 } else {
   return <LoginPage />;
 }
-```
+\`\`\`
 
 **Retorna**: `{ user: User | null, isLoading: boolean, isSignedIn: boolean }`
 
@@ -206,7 +206,7 @@ if (isSignedIn) {
 ### Tipos TypeScript
 
 #### `Profile`
-```typescript
+\`\`\`typescript
 type Profile = {
   id: string;
   email: string;
@@ -215,12 +215,12 @@ type Profile = {
   created_at: string;
   updated_at: string;
 };
-```
+\`\`\`
 
 ---
 
 #### `ShoppingList`
-```typescript
+\`\`\`typescript
 type ShoppingList = {
   id: string;
   user_id: string;
@@ -229,12 +229,12 @@ type ShoppingList = {
   created_at: string;
   updated_at: string;
 };
-```
+\`\`\`
 
 ---
 
 #### `ShoppingListItem`
-```typescript
+\`\`\`typescript
 type ShoppingListItem = {
   id: string;
   list_id: string;
@@ -244,13 +244,13 @@ type ShoppingListItem = {
   created_at: string;
   updated_at: string;
 };
-```
+\`\`\`
 
 ---
 
 ### Exemplo de Uso Completo
 
-```typescript
+\`\`\`typescript
 import { useAuth } from "@/components/auth-provider";
 import { getShoppingLists, addShoppingListItem } from "@/lib/shopping-lists";
 
@@ -288,7 +288,7 @@ export default function MyComponent() {
     </div>
   );
 }
-```
+\`\`\`
 
 ---
 
@@ -296,7 +296,7 @@ export default function MyComponent() {
 
 Todos os métodos retornam `error` para permitir tratamento gracioso:
 
-```typescript
+\`\`\`typescript
 try {
   const { lists, error } = await getShoppingLists(user.id);
   
@@ -319,7 +319,7 @@ try {
 } catch (err) {
   console.error("Erro não capturado:", err);
 }
-```
+\`\`\`
 
 ---
 

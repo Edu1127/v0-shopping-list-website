@@ -96,9 +96,9 @@ Todas as tabelas possuem RLS habilitado com as seguintes políticas:
 
 #### 5. **Pacotes Instalados**
 
-```bash
+\`\`\`bash
 npm install @supabase/supabase-js
-```
+\`\`\`
 
 ### 🔐 Segurança
 
@@ -143,7 +143,7 @@ Todos os dados são salvos no Supabase:
 
 ### 🔄 Fluxo de Autenticação
 
-```
+\`\`\`
 Login/Cadastro → Supabase Auth
                     ↓
              Cria/Atualiza Profile
@@ -153,18 +153,18 @@ Login/Cadastro → Supabase Auth
              Dashboard carrega listas do usuário
                     ↓
              Dados persistem no Supabase
-```
+\`\`\`
 
 ### 📝 Variáveis de Ambiente
 
 As seguintes variáveis devem estar no `.env.local`:
 
-```
+\`\`\`
 NEXT_PUBLIC_SUPABASE_URL=https://hipxwhxqpnsfdbtoaxfs.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 SUPABASE_JWT_SECRET=ybeC7zVlpH22cIQGYWXNJ/+KL2JW9v5gWaWyOmhnD68...
-```
+\`\`\`
 
 ### ✨ Funcionalidades Implementadas
 
