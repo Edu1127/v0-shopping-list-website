@@ -1,10 +1,10 @@
-```
+\`\`\`
 ╔════════════════════════════════════════════════════════════════╗
 ║                                                                ║
 ║   🎉 AUTENTICAÇÃO SUPABASE - COMPLETAMENTE IMPLEMENTADA 🎉   ║
 ║                                                                ║
 ╚════════════════════════════════════════════════════════════════╝
-```
+\`\`\`
 
 # 📚 Documentação e Guias
 
@@ -99,7 +99,7 @@ Resumo executivo do que foi implementado.
 
 ### Backend (TypeScript)
 
-```
+\`\`\`
 lib/
 ├── supabase.ts              # Cliente Supabase inicializado
 ├── auth.ts                  # Funções de autenticação
@@ -119,11 +119,11 @@ lib/
     ├── updateShoppingListItem()
     ├── deleteShoppingListItem()
     └── toggleShoppingListItem()
-```
+\`\`\`
 
 ### Frontend (React)
 
-```
+\`\`\`
 components/
 ├── auth-provider.tsx         # Context provider para autenticação
 │   └── useAuth() hook
@@ -140,14 +140,14 @@ app/
 ├── page.tsx                  # Página principal
 ├── globals.css               # Estilos globais (tema amarelo)
 └── ...
-```
+\`\`\`
 
 ---
 
 ## 🎯 Fluxos Principais
 
 ### Fluxo de Autenticação
-```
+\`\`\`
 Usuário → LoginPage → signUp/signIn() → Supabase
                     ↓
             Profile criado/carregado
@@ -157,10 +157,10 @@ Usuário → LoginPage → signUp/signIn() → Supabase
             Dashboard renderiza
                     ↓
             useAuth() Hook disponível
-```
+\`\`\`
 
 ### Fluxo de Dados
-```
+\`\`\`
 Dashboard → User interação → Chamada API
                 ↓
         Shopping Lists Service
@@ -172,7 +172,7 @@ Dashboard → User interação → Chamada API
         Resposta validada por RLS
                 ↓
         Dashboard atualiza UI
-```
+\`\`\`
 
 ---
 
@@ -221,7 +221,7 @@ Dashboard → User interação → Chamada API
 
 ## 🔧 Tecnologias Utilizadas
 
-```
+\`\`\`
 Frontend
 ├── Next.js 16
 ├── React 19
@@ -237,7 +237,7 @@ Banco de Dados
 ├── PostgreSQL (Supabase)
 ├── Row Level Security (RLS)
 └── JWT Authentication
-```
+\`\`\`
 
 ---
 
@@ -298,7 +298,7 @@ Banco de Dados
 
 ## 🎉 Status Final
 
-```
+\`\`\`
 ╔═══════════════════════════════════════════════════════════╗
 ║                                                           ║
 ║              ✅ PROJETO COMPLETO ✅                      ║
@@ -314,7 +314,7 @@ Banco de Dados
 ║              Comece com: npm run dev                     ║
 ║                                                           ║
 ╚═══════════════════════════════════════════════════════════╝
-```
+\`\`\`
 
 ---
 

@@ -9,11 +9,11 @@
 #### Passos
 
 1. **Fazer push para GitHub**
-   ```bash
+   \`\`\`bash
    git add .
    git commit -m "feat: add supabase authentication"
    git push origin main
-   ```
+   \`\`\`
 
 2. **Conectar ao Vercel**
    - Acesse vercel.com
@@ -23,10 +23,10 @@
 
 3. **Configurar Variáveis de Ambiente**
    - Environment Variables:
-     ```
+     \`\`\`
      NEXT_PUBLIC_SUPABASE_URL=https://hipxwhxqpnsfdbtoaxfs.supabase.co
      NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-     ```
+     \`\`\`
    - Clique "Deploy"
 
 4. **Pronto!**
@@ -62,7 +62,7 @@
 
 #### Dockerfile
 
-```dockerfile
+\`\`\`dockerfile
 FROM node:18-alpine
 
 WORKDIR /app
@@ -84,17 +84,17 @@ EXPOSE 3000
 
 # Start
 CMD ["npm", "start"]
-```
+\`\`\`
 
 #### Build e Run
 
-```bash
+\`\`\`bash
 docker build -t shopping-list .
 docker run -p 3000:3000 \
   -e NEXT_PUBLIC_SUPABASE_URL=https://... \
   -e NEXT_PUBLIC_SUPABASE_ANON_KEY=... \
   shopping-list
-```
+\`\`\`
 
 ### Opção 4: Railway
 
@@ -131,10 +131,10 @@ docker run -p 3000:3000 \
 
 ### Variáveis de Ambiente Necessárias
 
-```
+\`\`\`
 NEXT_PUBLIC_SUPABASE_URL
 NEXT_PUBLIC_SUPABASE_ANON_KEY
-```
+\`\`\`
 
 **Nota**: As outras variáveis (`SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_JWT_SECRET`) são apenas para development/testing local.
 

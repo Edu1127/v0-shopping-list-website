@@ -76,7 +76,7 @@
 
 ## Fluxo de Funcionamento
 
-```
+\`\`\`
 1. Usuário acessa /
    ↓
 2. AuthProvider verifica se há sessão ativa
@@ -97,7 +97,7 @@
 9. Ao fazer logout → SessionStorage é limpo
    ↓
 10. Retorna para LoginPage
-```
+\`\`\`
 
 ## Dados Persistidos no Supabase
 
@@ -135,9 +135,9 @@
 ## Como Começar
 
 ### 1. Iniciar servidor
-```bash
+\`\`\`bash
 npm run dev
-```
+\`\`\`
 
 ### 2. Acessar http://localhost:3000
 
@@ -154,12 +154,12 @@ npm run dev
 
 ## Variáveis de Ambiente (já configuradas)
 
-```
+\`\`\`
 NEXT_PUBLIC_SUPABASE_URL=https://hipxwhxqpnsfdbtoaxfs.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 SUPABASE_JWT_SECRET=ybeC7zVlpH22cIQGYWXNJ/+KL2JW9v5gWaWyOmhnD68...
-```
+\`\`\`
 
 ## Status do Projeto
 

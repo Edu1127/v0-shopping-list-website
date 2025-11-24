@@ -7,9 +7,9 @@
 
 ### 1. Iniciar o Servidor de Desenvolvimento
 
-```bash
+\`\`\`bash
 npm run dev
-```
+\`\`\`
 
 O servidor abrirá em `http://localhost:3000`
 
@@ -33,9 +33,9 @@ O servidor abrirá em `http://localhost:3000`
 2. Acesse **Authentication → Users**
 3. Deverá listar o novo usuário com o email cadastrado
 4. Acesse **SQL Editor** e execute:
-   ```sql
+   \`\`\`sql
    SELECT * FROM profiles WHERE email = 'joao@example.com';
-   ```
+   \`\`\`
    Deverá retornar o perfil criado
 
 ### 3. Testar Login
@@ -69,11 +69,11 @@ O servidor abrirá em `http://localhost:3000`
 - ✅ Progresso mostra 0%
 
 #### Verificar no Supabase:
-```sql
+\`\`\`sql
 SELECT * FROM shopping_lists WHERE user_id = (
   SELECT id FROM auth.users WHERE email = 'seu@email.com'
 );
-```
+\`\`\`
 
 ### 5. Testar CRUD de Itens
 
@@ -106,9 +106,9 @@ SELECT * FROM shopping_lists WHERE user_id = (
 - ✅ Progresso é atualizado
 
 #### Verificar no Supabase:
-```sql
+\`\`\`sql
 SELECT * FROM shopping_list_items WHERE list_id = 'ID_DA_LISTA';
-```
+\`\`\`
 - Deverá mostrar "Leite" com `completed = true`
 
 ### 7. Testar Logout
